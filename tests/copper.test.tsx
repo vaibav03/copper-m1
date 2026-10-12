@@ -25,10 +25,26 @@ describe("Brand components", () => {
     ).toBeInTheDocument();
   });
 
-  it("SiteFooter shows the fictional-use label", () => {
-    render(<SiteFooter />);
-    expect(screen.getByRole("contentinfo")).toHaveTextContent(
-      "Fictional — for educational use.",
+  it("SiteHeader links to the landing page sections", () => {
+    render(<SiteHeader />);
+    expect(screen.getByRole("banner")).toHaveAttribute(
+      "data-testid",
+      "site-header",
     );
+    for (const [name, href] of [
+      ["Products", "#products"],
+      ["Copper Plus", "#plus"],
+      ["Privacy", "#privacy"],
+    ]) {
+      expect(screen.getByRole("link", { name })).toHaveAttribute("href", href);
+    }
+  });
+
+  it("SiteFooter shows the fictional-use label and the logo", () => {
+    render(<SiteFooter />);
+    const footer = screen.getByRole("contentinfo");
+    expect(footer).toHaveTextContent("Fictional — for educational use.");
+    expect(footer).toHaveAttribute("data-testid", "site-footer");
+    expect(screen.getByAltText("Copper State Labs")).toBeInTheDocument();
   });
 });
